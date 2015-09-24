@@ -1,0 +1,110 @@
+var name = prompt ("what is your name")
+document.write("welcome to my apge" +name)
+
+variables
+========
+Data types
+Number
+String
+Boolean
+Other, Object
+
+Number
+-------
+one type of number, can be written with or without decimal places
+var_1 = 3
+var_2 = 24
+Scientific notation
+-----------------
+var x = 12e2 => 1200
+var y = 12e-3 => 12/1000
+
+string
+------
+name = "Manoj Gautam"
+last_name = "hello world"
+
+boolean_variable
+--------------------
+flag = true // remember capital letter
+flag = false // remember small letter
+
+typeof
+-------
+typeof(variable) //can be used to check the type of variable
+
+
+typecasting in javascript (Conversion from one type to other)
+==============================================================
+x = 12
+parseInt(x) => 12
+parseFloat(x) => 12.0
+String(x) => "12.0"
+
+
+events and functions
+=====================
+onload event
+<body onload="alert("Hello world");
+	      alert("How are you");
+	      promt("What is your name");// see the semicolon on each function
+	">
+
+</body>
+document.location.href(ht
+
+
+function do_this_onload() 
+	{
+		alert("hello world")
+		answer = prompt("what is your name")
+		return answer
+}
+
+result = do_this_reload()
+
+Handeling bugs
+==============
+use ctrl+ shift + I
+
+ifelse / case statement
+==========================
+username = prompt("what is your name")
+switch(username)
+{
+	case "ramesh":
+	document.write.href="http://google.com/";
+	break;
+
+	case "Manoj":
+	document.write.href="http://facebook.com/";
+	break;
+	
+	default:
+    document.write.href="http://example.com";
+}
+
+
+name = prompt("what is your name")
+if (name == "Manoj") { console.log("your name is " + "Manoj")}
+else if (name == "Ramesh") {console.log("your name is ramesh")}
+else
+{console.log("i cannot gurantee your name")
+}
+
+
+loops in javascript
+====================
+for, while and do/while loop
+
+whileloop
+----------
+while(condition)
+{
+	//do something
+};
+
+javascript string methods
+========================
+string = "rames of"
+text.indexOf("of") => 5
