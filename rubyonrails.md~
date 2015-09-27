@@ -368,6 +368,151 @@ yaml is the way of structuring the simple text file, and it is suite to the thin
 before configuring the database in .yml file let us understand the rails environment
 rails environment
 ------------------
-
+  Development environment: suited for while developing the apps in developer machine, we want all the error visible, so that we developer can fix this, these error includes the details description of our code, and we dont' want to expose to public
+  production: used when our app goes live, we don't want to error to be visible
+  test environment: we will use the test database for testing,
+It is also possible in rails to add other environment like staging environment, QA environment as your needs but these are the three default environment in rails
 
 rails has the inbuilt command to create database, but it is sometimes buggy, recommendation is just to create a database 
+
+connection test from rails to mysql
+--------------------------------------
+`rake db:schema:dump` #This command tells rails to connect to database and export schema to database, this will create the new file schema.rb in the db foder
+
+what is rake
+---------------
+rake is the simple ruby helper program, it is the ruby implementation of make **ruby implementation of make**, It run scripts known as **tasks**
+"rake" == "ruby make"
+the rake works by using the rake file implementation, which exist on the root of our application
+` rake -T ` #This will return the long list of rake tasks
+` rake -T db` # This only list the database tasks
+Sometime we need to pass environment variables to rake, so that rake can change its variable and response to the environments, for example
+` rake db:schema:dump RAILS_ENV=production`
+
+migrations: migration add tables
+---------------------------------
+Migration are the set of database instruction, written in ruby code, migrate our database from one state to other state, we can do
+create a table, add a column, delete a column, drop a table and much more, migration can have instruction to  move *UP* to new state and
+back *down* to previous state
+
+Generating migrations
+-----------------------------
+Migration are resides in the db by creating migrate directory
+`$ rails generate migration DoNothing` #Remember the camel case, actually this change to the snake case to migrate folder
+
+Generating models
+--------------------
+`rails generate model User` This command will generate the models, this will create
+1. db/migrate/timestamp_create_users.rb file #As user is the model name(singular) and users is the table name in migration so plural, model name singular, table name plural that is rails convention
+2. app/models/user.rb  model file
+3. test/models/user_test.rb
+4. test/fixtures/users.yml 
+
+
+creating the table column from the  db/migrate/timestamp_create_users.rb 
+```class CreateUsers < ActiveRecord::Migration
+  def up
+    create_table :users do |t|
+
+      t.column "first_name", :string
+      t.timestamps null: false
+
+    end
+  end
+
+  def down
+  	drop_table :users
+  end
+
+end ```
+
+Table column type
+---------------------
+binary
+boolean
+date 
+datetime
+time
+decimal
+string =>varchar
+text => text
+integer => int
+float
+
+creating the table using ruby code in rails
+==============================================
+create_table  "table" do |t|
+ t.column  "name", :type, options
+ t.type  "name", options
+end
+
+table column options 
+========================
+:limit =>size
+:default => value
+:null =>true/false
+:precision => number
+:scale => number 
+
+Now let us written the migration for our users table
+--------------------------------------------------------
+```
+def up
+    create_table :users do |t|
+
+      t.column "first_name", :string, :limit => 25
+      t.string "last_name", :limit => 25
+      t.string "password", :limit => 50, :null => false
+      t.string "email", :default => "", :null => false 
+      #t.datetime "created_at"
+      #t.datetime "updated_at"  #shorthand to t.timestampts
+      t.timestamps null: false #covered t.datetime "created_at" and t.datetime "updated_at" this handles automatically
+
+
+    end
+  end```
+Here we might wondering why dont we have id fields, as all the column have id created automatically by rails, we only need to specify the id if we don't want to have id column, to supress this just add hash after :users as ` create_table :users, {id => false}`  
+
+
+ok we have created migration for our User table, let us run this migration
+running the migration
+-------------------------
+just go to the root of the app and run the migrate command
+`rake db:migrate`
+on running this command, this will create the two tables, called
+1. schema_migrations
+2. users
+in the mysql database, so let us login into the mysql server and query the information
+`$ mysql -u simple_cms -p simple_cms_development`
+`mysql> use simple_cms_development;`
+`mysql> show databases;`
+`mysql> show fields from users`
+`mysql> show fields from schema_migrations`
+ok let us see the schema_migrations table, what the data it has
+`mysql> show * from schema_migrations`
+the schema_migration has the fields called `version` it will track the migrations and we can use this as an id to track the total migrations, and the version has the value of time stamps when the migrations occoured.
+
+Every time we run our migration the rails dumps our schema to `schema.rb` files and the `schema.rb` files always represent the current state of our database
+
+to downgrade the migrations just run the command
+`rake db:migrate VERSION=0` #Remember the CAPS letter don't forget
+you can verify this by logging into the mysql database and see the tables, you see that the User table has gone, and there is only one table called `schema_migration`
+when you query the data in `schema_migration` there is no any versions, when we do again `rake db:migrate` rails will create the new data
+
+`rake db:migrate status` => Give the status of the migration
+ Status   Migration ID    Migration Name
+--------------------------------------------------
+  down    20150927041714  Do nothing
+  down    20150927043124  Create users
+
+here you see the status is down, means no database, to restore you can just run the command
+`rake db:migrate VERSION=20150927043124` #Remember the capsVERSIOn and number
+
+running migrations commands
+----------------------------
+`rake db:migrate VERSION=0`
+`rake db:migrate VERSION=20150927043124`
+`rake db:migrate:status`
+`rake db:migrate up VERSION=20150927043124`
+`rake db:migrate down VERSIOn=20150927043124`
+`rake db:migrate redo VERSION=20150927043124`
