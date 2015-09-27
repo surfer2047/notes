@@ -108,3 +108,21 @@ javascript string methods
 ========================
 string = "rames of"
 text.indexOf("of") => 5
+
+do{
+ //some code 
+}while(x);
+
+global and local variable
+=========================
+<script>
+
+var x = 2 //global variable
+function hello(){
+	var y = 2 //local varialble
+	x = 4 //global variable as var is not declared
+	return x + y
+	z = 4 //global variable, not created with var
+}
+
+</script>
