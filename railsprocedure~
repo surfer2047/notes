@@ -1,0 +1,11 @@
+1. Install the rails
+2. Edit the Gemfile to support to create Gemfile.lock
+3. Install the bundler [ bundle install --without production ]
+4. Add to the git, as of Initilize repository
+5. Setup the heroku account
+6. Deploy and publish the app in heroku
+7. Create your resource
+8. bundle exec rake db:migrate
+
+
+

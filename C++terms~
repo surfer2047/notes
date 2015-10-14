@@ -1,0 +1,31 @@
+. Generic programming features: The features of pop
+. C++ super structures
+. Template
+. Expections
+. Namespace
+. spaghetti pro-gramming: Tangaled routing, in pop, programs start to suffer, when programs go complex, virtually impossible to understand the program by reading it
+. Top down program design: Breaking the problem in the modules and program it
+. object, Object is the data structure, that created from the class
+. class, Class is a specification describing the new data from
+. bottom-up programming: The process of writing the class and creating the programs is the bottom-up programming approaches 
+. Portable, If you can recompile your programs in the another machine without have to change it, it means your program is protable
+. .c extension tells the source file is C program
+. .C extension tells the source file is the C++ program
+. C++ extenion may be C, cxx, cpp, cc, 
+. cfront: Originally Strostups implemented C++ With C++ to c complier program instead of developing direct C++ to object code compiler , this program is called cfront
+. Compile: Compile the code in the file 
+. Build or make: Compile the code for all source code in the project, this is often incremental process, for instance if your project has the three files and you just change one, then the changed one will be compile
+
+. Build All: compile all the source code from the scratch
+. Run or execute, means run the program	
+. Debug: Run the program with options going step by step
+. Xcode: Xcode is the apple developer framework
+. statement, In programming the loc code ended with the semicolon is called statement
+. When there is no return type in main(), in C the default will be the int type
+. using namespace std; This is called `using` directive 
+. << "This is the name of Insertion operation as it insert the string or variables";
+. we can also use \n character for the newline instead of <<endl; directives
+. indivisible Line of code are called tokens in C++, such as main, int are tokean as they cannot divide into the new line
+. C++ statement, decleration statement int a;
+. Assignment statement a = 2;
+. we need to seperate the decleare statement and the assignment statement by the one blak lines

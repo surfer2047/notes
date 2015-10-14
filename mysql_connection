@@ -1,0 +1,3 @@
+Mysql Remote Login method
+========================
+> msyql -u cdmnepal_db1 -p cdmnepal_db1 -h cdmnepal.dns-systems.net

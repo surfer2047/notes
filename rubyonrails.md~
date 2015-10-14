@@ -41,7 +41,7 @@ rbenv => More popular
 
 installing rbenv version manager
 ------------------------------------
-
+```
 $ sudo apt-get install git-core curl zlib1g-dev build-essential \
 libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 \
 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev #This install dependencies
@@ -57,7 +57,7 @@ $ sudo source ~/.bashrc  # execute the changes
 $ sudo which rbenv # verify the rbenv location
 $ sudo cd /home/$USER/.rbenv/plugins
 $ sudo pull #pull the changes of ruby plugins, 
-
+```
 
 install different version of ruby using rbenv
 ---------------------------------------------
@@ -92,7 +92,8 @@ $ sudo apt-get install mysql-server mysql-client libmysqlclient-dev
 
 install msyql2 gem
 ----------------------
-gem install msyql2
+
+msyql2
 Install gems critical to Rails development, e.g.
 ----------------------------------------------------
 $ sudo gem install bundler foreman pg rails thin --no-rdoc --no-ri
@@ -133,7 +134,7 @@ open config/database.yml file and set your root password and comment the databas
 
 rails controller
 -------------------
-$  rails generate controller demo index #here, demo is the controller name and index is the view, all the arguments followed by first arguments will be the view
+`$  rails generate controller demo index` #here, demo is the controller name and index is the view, all the arguments followed by first arguments will be the view
 note: methods defined inside the <name>_controller are also called actions, index will be the action
 note: rails controller are just like the django apps
 
@@ -247,7 +248,7 @@ required template defined in the action body as
 
 ```
 def test()
-  render('test') #This will load the index.html.erb template from **views/student/** directory, you should create that test.html.erb template, this choice is best
+  render('test') #This will load the test.html.erb template from **views/student/** directory, you should create that test.html.erb template, this choice is best
   #render(:template # ("demo/test") #equivalent to above code
   #render("demo/test")#same code as of the first line
 end
@@ -402,7 +403,7 @@ Migration are resides in the db by creating migrate directory
 
 Generating models
 --------------------
-`rails generate model User` This command will generate the models, this will create
+`rails generate model User` This command will generate the models, this will create, CamelCase and singular
 1. db/migrate/timestamp_create_users.rb file #As user is the model name(singular) and users is the table name in migration so plural, model name singular, table name plural that is rails convention
 2. app/models/user.rb  model file
 3. test/models/user_test.rb
@@ -452,7 +453,8 @@ table column options
 :default => value
 :null =>true/false
 :precision => number
-:scale => number 
+:scale => number
+:after =>  
 
 Now let us written the migration for our users table
 --------------------------------------------------------
@@ -495,9 +497,9 @@ the schema_migration has the fields called `version` it will track the migration
 Every time we run our migration the rails dumps our schema to `schema.rb` files and the `schema.rb` files always represent the current state of our database
 
 to downgrade the migrations just run the command
-`rake db:migrate VERSION=0` #Remember the CAPS letter don't forget
 you can verify this by logging into the mysql database and see the tables, you see that the User table has gone, and there is only one table called `schema_migration`
 when you query the data in `schema_migration` there is no any versions, when we do again `rake db:migrate` rails will create the new data
+`rake db:migrate VERSION=0` #Remember the CAPS letter don't forget
 
 `rake db:migrate status` => Give the status of the migration
  Status   Migration ID    Migration Name
@@ -515,4 +517,430 @@ running migrations commands
 `rake db:migrate:status`
 `rake db:migrate up VERSION=20150927043124`
 `rake db:migrate down VERSIOn=20150927043124`
-`rake db:migrate redo VERSION=20150927043124`
+`rake db:migrate redo VERSION=20150927043124` #it say let go down and backup again
+**note**, if we dont specify the version number it will assume the last migration
+
+
+migrations methods
+---------------------
+create table
+--------------
+create_table(table, optins) do |t|
+
+end
+
+drop table
+-------------
+drop_table(table)
+
+rename table
+--------------
+rename_table(table, new_name) 
+
+column migration methods
+------------------------
+add_colum(table, column, type, options)
+rename_column(table, column, new_name)
+remove_column(table, column)
+change_column(table, column, type, options)
+
+
+Two migrations methods
+-------------------------
+1. index methods
+2. execute methods
+
+index methods
+-------------------
+add_index(table, column, options)
+remove_index(table, column)
+
+options for add_index are
+------------------------
+:unique => true /false 
+:name => "your custom name"
+
+
+execute methods
+-----------------
+execute("Any Sql string") #This will send directly to mysql
+
+
+ok let us work with the renaming the table
+---------------------------------------------
+let us create a migration 
+`rails generate migration AlterUsers` #have to see the plural form
+then in `db/timestamp_alter_user.rb`
+
+``` 
+def up()
+  rename_table("users", "admin_users") #remember the table name plural
+  #rename_table() has both up method and down method, not all  methods are reversible, if we remove column, it doesn't know how to put back, remember this point
+  add_column("admin_users", "username", :string, :limit => 25, :after => "email")
+  change_column("admin_users", "passwords", "hashed_passwords")
+  add_index("admin_users", "username") #Add the index to username of admin_users table to make the lookup faster
+end
+
+def down()
+   remove_index("admin_users", "username") #Add the index to username of admin_users table to make the lookup faster
+    change_column("admin_users", "hashed_password", "passwords")
+   add_column("admin_users", "username", :string, :limit => 25, :after => "email")
+   #rename_table() has both up method and down method, not all  methods are reversible, if we remove column, it doesn't know how to put back, remember this point
+  rename_table("users", "admin_users") #remember the table name plural
+ 
+
+  just do the reverse process of up method
+ 
+end	
+
+
+problem occours when running the migration and resolving
+-------------------------------------------------------
+when migration problem, the two solution will be handy,
+Either drop the mysql table (BAD, hard)
+comment the LOC in migration file and re run the migration
+Write SQL commands only at the LAST RESORT
+keep migrations small and consie
+Test all migrations throughly in  development
+
+
+migrations for our CMS
+-------------------------
+written in code see yourself
+change method => when you define this method, you don't need to explicitly define up and down method
+
+
+
+Active Record and Active Relations
+--------------------------------------
+Active record: These are the design patterns for the relational database, Rails implementation of ActiveRecord is written in sinle word **Active Record**
+ActiveRecord allows us to retrive data as an objects not as rows 
+The objects not only contain rows, but these also contain the CRUD operations
+**Active Record Examples**
+
+user = User.new
+user.first_name = "Kevin"
+user.save #SQL insert
+user.last_name = "Slouland"
+user.save #SQL update
+user.delete # SQL DELETE
+
+
+Active Relation
+-----------------
+Added in Rails V3
+also known as Arel
+object oriented interpretation of RelationalAlgebra
+ActiveRelation simplifies the generation of Complex database queries
+allows us to write small queries which is chainable one after another(like most ruby objects)
+complex join and aggregration using efficient SQL
+Queries don't execute until needed
+
+generating the models
+------------------------
+`rails generate model subjects`
+`self.table_name = "admin_users"`
+
+rails convention
+-------------------
+All models name are singular, while generating
+All models class are written in CamelCase
+All models filename are in snake_case
+all the tables corresponding to the model name are in pluralform + snake case admin_users
+
+rails console
+--------------
+help us to work directly with the models, command line application  
+
+`rails console`
+`rails console production`
+
+creating the records
+---------------------
+two methods: a) instiance method b) save method
+1. instiance from the class
+2. set the values
+3. save the objects
+
+create will do all in one step
+
+
+commands
+-----------
+subject.new_record ? => return true/false if it is created newely, return true, if it has been saved to the database
+subject.new(:name => "First app", :visible => "Hello" :position => 1) #This is called the mass assignment
+subject.create(:name => "Second app", :visible => true, :position =>2) #Create returns object, it doesn't return true/false, its our work 
+
+updating records in rails
+------------------------------
+two methods in rails to update the records
+1. Find/Save
+  a. find records
+  b. set values
+  c. save records
+
+2. find/update_attributes
+    a. find records
+    b. set values and save records (last two step in single step)
+
+commands
+-----------
+subject = Subject.find(1) #Find the subject whose id is equal to 1
+subject.name = "Initial subject" #we set the values
+subject.save #We save or update the records
+
+using mass assignment
+--------------------
+subject = subject.find(2)
+subject.update_attributes(:name => "Next subject", :visible => true, :position =>3)
+
+deleting a records Find/Destroy (Use Destory method than delete method, as Delete bypass some rails featues)
+-----------------------
+1. Find the records
+2. Destory the objects
+subject = Subject.find(3)
+subject.destroy()
+
+finding the records [ primary key finder and Dynamic Finder ]
+-----------------------
+Subject.find(2) #Primary key finder, Returns object or error
+Subject.find_by_id(2) # if doesn't find the object it will throw the nil, It is called the Dynamic finder because it supports the fields like
+Subject.find_by_name("First Name")
+Subject.find_by_last_name("Secondname")
+Subject.find_by_created_at(date)
+Subject.find_by_updated_at(date)
+Subject.find_by_visible(true)
+Subject.all #Return the array of objects
+Subject.first # Return the first object in the database
+Subject.last #Return the last object in the database if not find return nill, these a
+
+Query methods conditions
+-------------------------
+In rails we do the query conditions methods with the WHERE CONDITIONS
+Subject.where(:visible => true)
+The main difference between the finder methods and the Querymethods is Finder methods actually returns an arry while Query method return a ActiveRelation Object, which can be chained together, Example chaining of the object
+Subject.where(:visible => true).order("position ASC") #Daisy chained together
+
+ActiveRecord relation doesn't call a database immediately, which allow us to chain them together, we can also pass the STRINg on the where method also, like
+condition expression type 
+------------------------
+Hash type
+-----------
+Subject.where(:visible => true).order("position ASC") #Daisy chained together
+{:name => "Manoj", :visible =>true)
+Simple, escape Sql and safe from sql injection
+Each key value pair is joined with AND statement
+only support equality, range and subset checking
+No, OR, Like less than or greater than
+
+STRING TYPE
+-------------
+"name = 'first subject' AND visbible = true" => But this might lead to the sql injection, Use carefully and beaware of sql injection
+
+Array type
+---------------
+["name" ? And visible = "true", "First subject"]
+flexible raw sql, safe from sql inject
+
+code
+------
+subject = Subject.where(:visible => true) #This will return the ActiveRecord Relation
+We can also get the sql from the returned object relation object
+`subject.to_sql`
+
+with string
+------------
+Subject.where("visible = true")
+
+array method
+---------
+Subject.where(["visible = ?", true]) #Here the ? work as an place holder which hold true value
+
+chainable records
+==================
+Subject.where(:visible => true).where(:position =>1)
+Subject.where(:id => 1).first
+Subject.where(:id => 1).last
+
+
+Query Methods: Order, Limit, Offset
+======================================
+order(sql_fragment): can sort, alphabetically, reverse alphabetically, assending, desending, chronologically, reverse chronologically
+sql_fragement format will look like, table_name.column_name ASC/DESC, ASC is the default
+
+limit(integer): Limit the results that are returned
+offset(integer) #offset(20) This will skip the 20 records and display remaining
+Subject.order(position ASC).limit(20).offset(50)
+order("Subject.visible DESC, Subjects.name ASC")
+
+
+Named Scope in the model
+========================
+name scope allow us to define an active relation query and store in a model
+in rails 4 named scope require to use ruby lambda syntax
+
+scope :active, lambda  {where (:active => true)}, active is the name of the scope and lambda is the defination of the scope
+and there is also another lambda symbols introduced in ruby 
+
+scope :active -> {where (:active => true)}
+Lambda expressions are evaluated when they called, so lambda will be benificial when working with time
+
+we can change also
+
+Article.recent.visible.newest_first
+
+some of the scope variables are here
+=======================================
+class Subject < ActiveRecord::Base
+
+	#In the models we just write the query
+
+	scope :visible,  lambda {where(:visible => true) }
+	scope :invisible,  lambda {where(:visible => false) }
+	scope :sorted, lambda { order("subjects.position ASC") }
+	scope :newest_first, lambda { order("subjects.created_at DESC") }
+	scope :search, lambda { |query|
+
+			where(["name LIKE ?", "%#{query}%"])
+	  }
+	
+
+
+end
+
+you can try this in rails console
+
+irb>Subject.visible
+irb>Subjet.invisible
+irb>Suject.visible.sorted
+irb>SUbject.visible.sorted.newest_first
+irb>Subject.search("Iniital")
+
+
+
+Associaltion in rails
+=========================
+Define the relations between the tables	
+active records provide the association to define relation
+Relation datatype types
+=======================
+one-to-one [foreign key should be go to the belongs_to model] teacher belongs to classroom [teacher_id is placed in classromm table\
+one-to-many [teacher teachs many subjects, ie is subject belongs to the teacher, so subject_id will placed in the teacher,generally placed in child
+many-to-many, abbreviated as m:n, A course has many student and also belongs to many student, a student has many courses and also many courses belongs to many student, so we have two foreign key, and we need a join table,
+A join table is a third table which sit between the two existing tables in order to make the relationship between them, this will hold the two foreign key 
+
+
+one to one
+--------------
+Classroom has_one :teacher
+Teacher belongs_to :classroom
+
+one_to_many
+Teacher has_many :courses
+Course belongs_to :teacher
+
+
+many_to_many
+
+Course has_and_belongs_to_many :student	[shortform HABTM]
+Studen has_and_belongs_to_many :courses
+
+one to one association
+-------------------------
+Employee has_one :office
+Student has_one :id_card
+
+Subject-page relation
+----------------------------
+Subject has_one :page
+Page belongs_to :subject (Class with belongs_to have the  key) her Page table have subject_id
+
+
+has_one Method
+-----------------
+subject.page
+
+
+working with one to one relationship subject-page
+-------------------------------------------------
+new_page = Page.new(...)
+subject = Subject.new(...)
+subject.page = new_page #page method is provided by has_one relation
+subject.page.destroy #It destropy the page
+
+
+One to many associastion(relation)
+-----------------------------
+Much more commonly used
+Plural name for relationship
+Return array of objects rather than singular object	
+
+Photographer has_many :photographs
+Style has_many :products
+Subject has_many :pages #note plural pages
+Page belongs_to :subject
+
+
+has_many methods
+--------------------
+subject.pages
+subject.pages << page #Append the page on the set of pages , << is ruby operator
+subject.pages = [page, page, page]
+subject.pages.delete(page)
+subjec.pages.destory(page) #Delete from database
+subject.pages.clear() #Remove all the pages
+subject.pages.empty ? #To check the emptyness of an array
+subject.pages.size  
+
+
+
+
+one to many rel
+-------------------
+subject = Subject.find(1)
+subject.pages #Remember pages not page, return the array of pages
+
+new_page = Page.new(:name => "New page", :permalink => "First", :position => 1)
+subject.pages << new_page
+new_page.subject
+subject.pages.delete(new_page) #Delete the relation only
+subject.page.destroy(new_page)# Delete from the Database also
+
+
+many to many operations
+===========================
+simple join and complex join
+example,	
+Blogpost has_and_belongs_to_many :categories
+Project has_and_belongs_to_many :collabora
+tors
+It is just like one to many associations from the both side at the same time, so we will use the extra table to store the foreign key of both sides
+
+JOIN TABLE
+------------
+Have two foerign key, index both key together
+No primary key column (:id => false)
+
+AdminUser -> Page (many to many relation as certain admin can only edit page)
+AdminUser has_and_belongs_to_many :pages	
+Page has_and_belongs_to_many : admin_users
+
+so, we need to create a migrations for the join table, Rails convention for join table
+
+Join table Naming
+------------------
+Both table names are plural
+Alphabetical order
+Default name can be configured
+
+example 
+Project - Collaborator
+collaborators_projects
+
+Blogpost - Category
+blogposts_categories
+
+AdminUser - Page
+admin_users_page
+
+first_table + _ + second_table 	 

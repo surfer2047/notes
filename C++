@@ -1,0 +1,109 @@
+C++ support the object oriented programming features and the generic programming
+C++ has become the compact, fast and portable language
+The book will teach from the modest basic of the language to the glory of the object oriented programming language
+
+C++ joins three seperate programming language 1. POP which is the gene of the C 2. OOP and 3. Generic programming through the use of Templates
+Going from C to C++ perhaps need more work than learning C
+If you know C, you have to unlearn some habits while moving to C++
+This book doesn't explore the nook and cranny of the language
+Assembly language is specific to a particular computer processor
+
+In general programming language deals with the two concepts, DATA and ALGORITHMS
+DATA: Data constitue the information that a porgram use and process
+ALGORITHMS: Algorithms are the methods that the computer use
+
+DATA + ALGORITHMS = PROGRAMS
+
+Structural programming limits branches
+
+There are more to oops than binding the data and methods, such as OOP facilates the creating the reusable code
+Information hiding, safegurads data from the improper access, Polymorphism helps us to create the multiple definations for operators and functions.
+Inheritance let us to derive new classes from the old one
+
+Instead of concerning in the task(POP), in OOP we need to concentrate in Concepts, Instead up top down programming approach we need to look up the bottom up programming approach.
+
+Designing the useful and reliable task is difficult task. OOP language make it simple to incorporate  existing class libraries into our own classes
+
+
+C++ and generic programming
+-----------------------------
+Generic programming is the another programming paradigm supported by C++
+Generic programming emphasize independance from the particular data type
+OOP is a tool form managing the large projects, while generic programming provides the tools for the common tasks such as sorting data and merging the list
+The generic refers to the code that is type independent, 
+C++ supports the various data types such as integer, number with fractional parts, character, string of characters and many more user defined data types for complex structure, for example if you need to sort the these data types, we need to write the seperate sort function, for each types, with the generic programming paradigm, we write the single function and use this function to sort the type(generic is independent of type)
+
+
+The Genesis of C++
+----------------------
+C++ was developed in early 1980
+C++ opp features was inspired by the computer simulation language called simula67
+C++ was created by adding the OOP features + generic features in C, so
+C++ was a superset of C
+any C program is the valid C++ program
+C++ program can use existing C software libraries
+The  name C++ came from the C increment operator ++
+ANSI (American National Standard Institue ) has developed the standard for C and C++, the ISO has join the community thus ANSI/ISO commite governs the standard of C++
+my_program.c This is the c program source file
+my_program.C This is the c++ program
+
+
+Unix Compiling and Linking
+----------------------------
+Originally unix `CC` command invokes the cfront, However cfront didn't keep pace with the C++ evolution
+Now day's unix has no C++ compiler, in case of no compiler `CC` commands still work, But we will us GNU g++ compiler
+
+Sometimes if we include the library such as math, we need to explicitly define the library while compiling the program, this is the case when the compilation has done
+through the command line, in IDE not needed
+
+```
+#include <stdio.h>
+#include <math.h>
+int main(void)
+{
+ }
+	
+
+```
+To compile this program we need to run the command like this
+> CC my_program.cpp -lm -o my_program
+
+Most of the linux distribution will have the GNU g++ compiler, we will use this g++ comiler, to compile the C++ program with the g++ code, just run this command
+
+>g++ my_program.C -o my_program
+>g++ my_program.cc -lg g++ // This say link to the standard C++ library
+>g++ my_program.cc test.cc //This will compile the multiple program 
+
+
+Debugging with errors
+----------------------
+When fixing errors, look for the line numbers, if you cannont find always look for the precedding line, 
+Note: Be aware of the fact that the particular compiler accepts the program dosen't mean the program is C++ valid, and the fact that the particular program reject a program dosent' necessarily means the program is invalid
+
+** Compiler has also the options to control how strict the compiler is
+
+Occasionaly compilers get confused after incompletly building of the program and respond by giving the meaningless error message that cannot fixed, In such cases you can clear up this by selecting the build all to restart the process from the scratch
+
+** Some compiler close the windows as soon as they finish the program execution and some leave open, To see the output you must set some line of code at the end of the program which are given below
+
+cin.get(); // This program
+cin.get(); // This program too
+return 0
+
+}
+
+cin.get() statement waits for the NEXT(ENTER) keystroke, so this statement cause the program to wait until you press the ENTER key
+
+<iostream>: In the header file .h extension has been reserved for the C header files and for C++ it is not included
+Now even in C++ while using the C header files the .h extension has been dropped and used as cmath instead of math.h
+
+if you are using <iostream> instead <iostream.h> you need to include `using namespace std`, even using #include<iostream.h> doesn't work you need to use 
+#include <iostream.h>
+using namespace std;
+
+C++ source code style
+=======================
+One statement per line
+An opening brace and a closing brace for a function, each of which is on its own line
+Statements in a function indented from the braces
+No whitespace around the parentheses associated with a function name

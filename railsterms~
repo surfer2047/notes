@@ -1,0 +1,106 @@
+-> root route:
+-> staging area: Contains pending changes to our project
+-> git commit locals: only recored to the local machine we need to push those commits 
+-> In git we will write the commit message in present tense. techinically speaking this is called Impreative mood
+-> Impreative mood
+-> phusion passenger: http://modrails.com nginx and apache models for rails/ruby app deployment
+-> full serivce deployment companies: Engineyard, Rails Machine
+-> Cloud deployment service: Engine yard cloud, ninefold, Heroku
+-> pg gem: heroku use the postgreSQL as the database, so we need to add the `pg` gem in the production
+-> rails_12factor gem: Gem used by heroku to server the static assets
+-> bundle install --without production #Prevent rails to install the production gems in our local machine
+-> Heroku toolbelt: This will provide the herkou CLI install it from heroku toolbelt https://toolbelt.heroku.com
+-> heroku version
+-> heroku rename surfer2047
+-> scaffold generator: Generators to build application
+-> REST architecture, First framework having REST features
+-> rails generate scaffold User name:string name:email
+-> buldle exec rake db:migrate #Update the database with our new users, 
+-> bundle exec ensure that the rake version will be used according to our Gemfile
+-> Rake: Rake is a ruby make
+-> bundle exec rake -T db
+-> bundle exec rake -T
+-> REST: REpresentational State Transfer
+-> ApplicationController itself inherits from the ActionController::Base
+-> automated testing
+-> code refactoring: Chainging the internal structure of the code without chaing its behaviour
+-> bundle update: to update the gems
+-> heroku logs
+-> rails g #Shortcuts for rails generate
+-> rails c 
+-> rails s
+-> bundle install => Shortcuts to bundle 
+-> rake test => shortcuts to rake
+-> automated test
+-> TDD: Test Driven Development, Programmers writes the  failed 	test first
+-> good developer write the test first
+-> Integration test: test functionality across models, views and controller
+-> Integration test is powerful as they allow us to simulate the action of user interacting with our application using browser
+-> RED GREEN REFACTOR CYCLE : write the failed test first, write the code and make the test to output green color 
+-> Code smell
+->  layout file to eliminate duplication (Refactor) in rails
+-> rails new command create the layout file inside app/views/layouts/application.html.erb layout_file
+-> provide rails function to set a different title on a page
+-> <% provide(:title, "Home") %>
+-> <%= yeild(:title) %>
+-> <% %> This will execute the code inside
+-> <%= %> This will execute and insert the code inside it
+-> rails special layout file called application.html.erb which resides into apps/views/layouts/application.html.erb
+-> To get the layout works we have to replace the default title with the embeeded ruby <title><%= yeild(:titlke) %> </title>
+-> Test Driven development use the "Red Green refactor" cycle
+-> Rails layout allow us to use the common template in the application to avoid the duplication in the rails views code	
+-> string interpolation
+-> test helper file, use this file to add the code of minitest reporters to produce and red and green color of test test/test_helper.rb
+-> Backtrace silencer: It is the solution to filter the unwanted lines, to filter the unwanted line like gem dependencipes we need to supress
+-> mini_backtrace gem: Use the mini_backtracer gem with backtrace silencer inside config/initilizer/backtracer_silencer.rb file
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

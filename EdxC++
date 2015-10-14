@@ -1,0 +1,77 @@
+Compilation process
+====================
+1. First the code is built which is the multi step process
+2. Preprocessing happenes, adding the code from the libraries to the source code
+3. Compile the programs
+4. Convert into object code
+5. Linking the code
+6. Execute the code
+
+some C++ terms
+==============
+Declarations: Used to declare variables and constants, that will be used in our applications
+Assignments 
+Preprocessor Directives
+Comments
+Function Declarations
+executable statementes
+
+Data types in C++
+=================== 
+Type Name	Bytes		Alias		Range
+int		4		signed		–2,147,483,648 to 2,147,483,647
+unsigned int	4		unsigned	0 to 4,294,967,295
+__int18 int	1		char		-128 to 127
+unsigned __int8	1		unsigned char	0 to 255
+__int16		2		short, short int, unsigned short int	0 to 65,535
+unsigned __int162		unsigned short, unsigned short int	0 to 4,294,967,295
+__int32	4	signed, signed int, int	–2,147,483,648 to 2,147,483,647
+unsigned __int32	4	unsigned, unsigned int	0 to 4,294,967,295
+__int64	8	long long, signed long long	–9,223,372,036,854,775,808 to 9,223,372,036,854,775,807
+unsigned __int64	8	unsigned long long	0 to 18,446,744,073,709,551,615
+short	2	short int, signed short int	-32,768 to 32,767
+unsigned short	2	unsigned short int	0 to 65,535
+long	4	long int, signed long int	–2,147,483,648 to 2,147,483,647
+unsigned long	4	unsigned long int	0 to 4,294,967,295
+long long	8	none	–9,223,372,036,854,775,808 to 9,223,372,036,854,775,807
+unsigned long long	8	none	0 to 18,446,744,073,709,551,615
+float	4	none	3.4E +/- 38 (7 digits)
+double	8	none	1.7E +/- 308 (15 digits)
+long double	8	none	1.7E +/- 308 (15 digits)
+
+
+most used data types
+====================
+int 	4 bytes
+float 	4 bytes
+long 	4 bytes
+double 	8 bytes
+long double 	8 bytes
+long long 8 bytes
+short 2 bytes
+
+
+charater data
+--------------
+Character data is used to store the numeric data, for such as symbols and letter
+
+
+bool data type
+----------------
+bool bytes 1 value true or false
+In C programming language false was represented as 0 and true is represented as 1
+
+enumeration data type
+----------------------
+enum
+Enum is a set of constants stored as literal values
+
+pro tips for choosing the data types
+----------------------------------------
+Making the use of short rather than int
+use the double insted of float for good precision like money
+use wchar_t for character to support the non-ascii characers
+
+
+variables and constant in  C++
+-------------------------------

@@ -1,0 +1,241 @@
+For rails environment installation follow the tutorials in
+1. Installrails.com
+
+$ rails _4.2.4_ new hello_app
+
+
+Minimal Git configuration
+=========================
+git config --global user.name "Manoj Gautam"
+git config --global user.email "surfer.manoj@gmail.com"
+git config --global push.default matching  #Ensure the forward compability with the upcomming git
+git config --global alias.co checkout
+
+git add -A => same as git add .
+git status => Show the pending files in the staging area
+git commit -m "Initilize repository"
+git log => Display the list of Commit
+git checkout -f => Revert to the deleted files such by rm -rf apps/*, cannot revert if the commit has been done
+
+branch
+-------
+git checkout -b modified_readme
+  OR
+git branch modified_readme
+git checkout modified_readme
+git branch => Display the branches of the project
+git mv README.rdoc README.md
+
+git commint -a -m "Imporved the README.md file", -a flag will not track the new files, need to run `git add -A` command
+
+merging
+---------
+git checkout master
+git merge modify-README #This will merge the modify-README branch with the master branch
+git branch -d modify-README #This	
+
+
+
+Heroku setup
+------------
+Heroku use the postgreSQL for short (postgres)
+so we need to add the `pg` gem in the the production
+Run this commands for the root of your app
+
+$ bundle install --without production #This avoid the prouduction gems not to installed in the development machine
+
+heroku toolbelt install
+$ wget -O- https://toolbelt.heroku.com/install-ubuntu.sh | sh
+$ heroku version
+$ heroku login
+$ heroku keys:add
+$ heroku create #Run this command in the root of your app
+$ git push heroku master
+$ heroku open #This will open your app using heroku URL
+$ heroku rename
+$ heroku run rake db:migrate
+$ heroku logs
+
+scaffolding in rails 
+---------------------
+$ rails generate scaffold User name:string email:string
+$ rails generate scaffold Micropost content:text user_id:integer
+$ rails destroy scaffold Micropost content:text user_id:integer
+
+migrating the database
+--------------------------
+$ bundle exec rake db:migrate 
+$ bundle exec rake db:rollback #This will undo the migration which is done just before
+$ bundle exec rake db:migrate VERSION=0 #This will push you all the way back to the begining
+	
+
+
+HTTP request methods and also called HTTP OPERATIONS
+----------------------
+GET => Show just like display info
+POST => Create new info
+PATCH => Update
+DELETE => Destroy
+
+
+weekness with the scaffold code generation
+---------------------------------------
+Doesn't provide the validations
+No tests
+No code understanding, if you understand the scaffold code, you probaly shouldn't reading this book
+No authentication
+No styles and layout
+
+
+validations
+-------------
+Validations are palced in the models in rails using the `validates` keyword
+class Micropost < ActiveRecord::Base
+validates :content, length: {maximum:140}, presence: true
+validates :content, presence:true
+validates :name, presence:true
+validates :email, presence:true
+validates :name, presence:true
+validates :content, presence:true, length: {maximum:140}
+
+rails console
+-------------
+first_user = User.first
+first_user.micropost
+first_user.micropost.first
+
+
+	
+Static pages
+----------
+
+generating the controller
+------------------------
+rails generate controller StaticPages home help
+rails destroy controller StaticPages home help #This will remove all the files and Line of code that make entry
+
+
+route.rb file
+----------------
+get 'controller_name/action'
+root "application#index"
+get 'static_pages/index'
+get 'static_pages/home'
+get 'static_pages/about'
+get 'static_pages/help'
+root 'static_pages#home'
+
+rails views
+------------
+Rails views simply contains static html
+
+
+getting started with testing
+---------------------------------
+what test do
+--------------
+Test protect against regression
+Test help to refactor your code
+Test act as an client for the application code
+
+when to write the test first
+----------------------------
+when the test is espically short or simple compared to the application code ,
+when the desired behaviour is not yet crystal clear write the application code first and then write a test to codify the result
+when a bug is found write a test to reproduce it and protect it against regression and then write the fix 
+
+In general we will do the 
+1. Model and Controller test first  and in the second we will do the  intergariont est
+2. Integration test: Test functionality across [Models views and controller]
+
+we will write the test first 
+-----------------------------
+we will write test for the StaticPages controller, for this ruby create the file for us under  test/controllers/static_pages_controller.rb
+
+class StaticPagesControllerTest < ActionController::TestCase
+
+test "Should get home" do
+get :home
+assert_response :success
+assert_select "title", "Hello world"
+end
+
+test "This will test the title"
+assert_select "title", "Home Rails"
+end
+
+test "Shoud go to here"
+get :about
+assert_response :success
+end
+
+test "This will test about"
+get :about
+assert_response :success
+assert_select "title", "Hello world"
+
+$bundle exec rake test
+
+howerver test take some times which is due to the two factors
+1. Starting the spring server to preload the rails Environment, only happens for first time
+2. Overhead associated with the ruby startup time
+
+
+Layouts and embeeded ruby Refactor
+------------------------------------
+Our embeeded ruby are suffer from the terrible duplication, which is the violation of the DRY principle, We need to "DRY" our code by removing the repetation, we will insert remove the repeated code in views as the same code is placed in apps/views/layouts/application.html.erb file and pull it from the apps/views/layouts/application.html.erb file the pull code will be
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= yield(:title) %> | Ruby on rails Tutorial Sample app</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+
+<%= yield %>
+
+</body>
+</html>
+
+
+so when we creating the new views for rails app we don't need to add these lines, this will automatically added, if you put this, this will voilate the "DRY" principle 
+
+Advance testing setup
+---------------------
+There main elements
+1. Enhanced Pass/Fail reporter
+2. Utility to filter the backtrace produced by fail test
+3. Automated test runner that detect file changes and automatically run the corresponding tests
+
+minitest reporters
+--------------------
+To get the default    rails to show  Red and green at the appropriate times, we need to add the code to the test helper file, test/helper_test.rb
+test/test_helper.rb
+------------------
+ENV['RAILS_ENV'] ||= 'test'
+require File.expand_path('../../config/environment', __FILE__)
+require 'rails/test_help'
+require 'minitest/reporters' #This line import the minitest reportes to produce color
+Minitest::Reporters.use! #This line also activate minitest reporters
+
+class ActiveSupport::TestCase
+  # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
+  fixtures :all
+
+  # Add more helper methods to be used by all tests here...
+end
+
+
+Automated test with guard
+----------------------------
+One annoyance associated with the rake test is to having to switch to the command line and run the test by hand, To avoid this inconvenice we use the GUARD
+to automate the running of the test, guard moniter the changes in the file system, for instance if we change static_pages
+
+
+
+
+
+

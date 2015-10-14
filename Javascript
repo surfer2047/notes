@@ -131,3 +131,19 @@ function hello(){
 
 logical operators
 =================
+&& || ! are the logical operators in javascripts
+
+arrays in javascripts
+=====================
+var x = [1, 2, 'hello']
+
+var pets = new Array(10) #Create the array of length 10
+
+x.join('and') => "1 and 2 and hello"
+x.join() => "1, 2 , hello"
+x.push("manoj")
+x.unshift("Ramesh") // put the Ramesh at the begining of the array
+x.pop() // pops the last item
+x.shift() //remove the element from the first
+array1.concat(array2) // concatenate the two arrays
+
